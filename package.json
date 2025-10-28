@@ -1,0 +1,31 @@
+{
+  "name": "@labset/template",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Hasnae R.",
+  "workspaces": [
+    "_harness",
+    "_schema",
+    "api/web-sdk",
+    "platform/backend",
+    "platform/frontend"
+  ],
+  "scripts": {
+    "claude": "claude",
+    "harness": "npm run --workspace @labset/template-harness",
+    "schema": "npm run --workspace @labset/template-schema",
+    "backend": "npm run --workspace @labset/template-platform-backend",
+    "frontend": "npm run --workspace @labset/template-platform-frontend",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@anthropic-ai/claude-code": "^2.0.26",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
+  }
+}

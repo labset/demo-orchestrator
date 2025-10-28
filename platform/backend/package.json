@@ -1,0 +1,19 @@
+{
+  "name": "@labset/template-platform-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "cli": "go run ./cmd/cli",
+    "lint": "./bin/lint.sh",
+    "lint:fix": "./bin/lint.sh --fix",
+    "codegen": "./bin/codegen.sh",
+    "start": "modd",
+    "debug": "modd -f ./modd-debug.conf",
+    "test": "go test ./...",
+    "test:verbose": "go test -v ./...",
+    "test:coverage": "go test -cover ./...",
+    "test:integration": "go test -tags=integration ./...",
+    "test:e2e": "go test -tags=e2e ./tests/e2e/...",
+    "test:all": "go test -tags=\"integration e2e\" -cover ./..."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@labset/template-schema",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "./bin/lint.sh",
+    "codegen": "./bin/codegen.sh"
+  }
+}

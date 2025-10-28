@@ -1,0 +1,63 @@
+version: "2"
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+    - golines
+
+linters:
+  enable:
+    - copyloopvar
+    - err113
+    - errorlint
+    - exptostd
+    - depguard
+    - fatcontext
+    - gocritic
+    - govet
+    - iface
+    - importas
+    - intrange
+    - mirror
+    - misspell
+    - nakedret
+    - nlreturn
+    - nolintlint
+    - perfsprint
+    - protogetter
+    - sloglint
+    - staticcheck
+    - tagalign
+    - testifylint
+    - usestdlibvars
+    - usetesting
+    - whitespace
+    - wsl_v5
+  settings:
+    allow-first-in-block: true
+    allow-whole-block: false
+    branch-max-lines: 2
+    depguard:
+      rules:
+        main:
+          allow:
+            - $gostd
+            - api/go-sdk
+            - platform/backend/config
+            - platform/backend/data
+            - platform/backend/internal/api
+            - platform/backend/internal/domain
+            - connectrpc.com/connect
+            - connectrpc.com/cors
+            - github.com/gin-contrib/cors
+            - github.com/gin-contrib/sessions
+            - github.com/gin-gonic/gin
+            - github.com/gofrs/uuid/v5
+            - github.com/joho/godotenv
+            - github.com/lib/pq
+            - github.com/pressly/goose/v3
+            - github.com/rs/zerolog/log
+            - github.com/spf13/cobra
+            - golang.org/x/net/http2
+            - golang.org/x/net/http2/h2c

@@ -1,0 +1,18 @@
+networks:
+  template_network:
+    driver: bridge
+    name: template_network
+
+services:
+  database:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: template
+      POSTGRES_PASSWORD: template
+      POSTGRES_DB: template
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../.local/database:/var/lib/postgresql/data
+    networks:
+      - template_network

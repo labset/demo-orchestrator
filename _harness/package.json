@@ -1,0 +1,9 @@
+{
+  "name": "@labset/template-harness",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "docker-compose -f docker-compose.yaml up -d",
+    "stop": "docker-compose -f docker-compose.yaml down"
+  }
+}
