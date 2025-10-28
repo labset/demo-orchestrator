@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+option go_package = "api/go-sdk/cms/v1;cmsV1";
+
+package cms.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Folder represents a hierarchical container for organizing documents
+message Folder {
+  // Unique identifier for the folder
+  int64 id = 1;
+
+  // Display name of the folder
+  string name = 2;
+
+  // ID of the parent folder (null for root folders)
+  optional int64 parent_id = 3;
+
+  // When the folder was created
+  google.protobuf.Timestamp created_at = 4;
+
+  // When the folder was last updated
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// Label represents a tag for cross-cutting categorization of documents
+message Label {
+  // Unique identifier for the label
+  int64 id = 1;
+
+  // Display name of the label
+  string name = 2;
+
+  // Hex color code for the label (e.g., "#FF5733")
+  string color = 3;
+
+  // When the label was created
+  google.protobuf.Timestamp created_at = 4;
+}
+
+// Document represents a piece of content with rich text formatting
+message Document {
+  // Unique identifier for the document
+  int64 id = 1;
+
+  // Title of the document
+  string title = 2;
+
+  // Rich text content (stored as HTML/JSON from Tiptap editor)
+  string content = 3;
+
+  // ID of the folder containing this document
+  int64 folder_id = 4;
+
+  // Labels applied to this document
+  repeated Label labels = 5;
+
+  // When the document was created
+  google.protobuf.Timestamp created_at = 6;
+
+  // When the document was last updated
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+// SearchResult represents a document found in search with relevance score
+message SearchResult {
+  // The matching document
+  Document document = 1;
+
+  // Relevance score (higher is more relevant)
+  float rank = 2;
+
+  // Highlighted snippet showing matched content
+  string snippet = 3;
+}
+
+// FilterMode specifies how to combine label filters
+enum FilterMode {
+  // Default unspecified mode
+  FILTER_MODE_UNSPECIFIED = 0;
+
+  // Match documents with ANY of the specified labels (OR logic)
+  FILTER_MODE_OR = 1;
+
+  // Match documents with ALL of the specified labels (AND logic)
+  FILTER_MODE_AND = 2;
+}

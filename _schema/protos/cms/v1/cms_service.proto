@@ -1,0 +1,327 @@
+syntax = "proto3";
+
+option go_package = "api/go-sdk/cms/v1;cmsV1";
+
+package cms.v1;
+
+import "cms/v1/cms_model.proto";
+
+// ContentService provides operations for managing folders, labels, and documents
+service ContentService {
+  // Folder Management
+  rpc CreateFolder(CreateFolderRequest) returns (CreateFolderResponse) {}
+  rpc GetFolder(GetFolderRequest) returns (GetFolderResponse) {}
+  rpc ListFolders(ListFoldersRequest) returns (ListFoldersResponse) {}
+  rpc UpdateFolder(UpdateFolderRequest) returns (UpdateFolderResponse) {}
+  rpc DeleteFolder(DeleteFolderRequest) returns (DeleteFolderResponse) {}
+
+  // Label Management
+  rpc CreateLabel(CreateLabelRequest) returns (CreateLabelResponse) {}
+  rpc ListLabels(ListLabelsRequest) returns (ListLabelsResponse) {}
+  rpc UpdateLabel(UpdateLabelRequest) returns (UpdateLabelResponse) {}
+  rpc DeleteLabel(DeleteLabelRequest) returns (DeleteLabelResponse) {}
+
+  // Document Management
+  rpc CreateDocument(CreateDocumentRequest) returns (CreateDocumentResponse) {}
+  rpc GetDocument(GetDocumentRequest) returns (GetDocumentResponse) {}
+  rpc ListDocuments(ListDocumentsRequest) returns (ListDocumentsResponse) {}
+  rpc UpdateDocument(UpdateDocumentRequest) returns (UpdateDocumentResponse) {}
+  rpc DeleteDocument(DeleteDocumentRequest) returns (DeleteDocumentResponse) {}
+
+  // Document-Label Association
+  rpc AddLabelToDocument(AddLabelToDocumentRequest) returns (AddLabelToDocumentResponse) {}
+  rpc RemoveLabelFromDocument(RemoveLabelFromDocumentRequest) returns (RemoveLabelFromDocumentResponse) {}
+
+  // Search
+  rpc SearchDocuments(SearchDocumentsRequest) returns (SearchDocumentsResponse) {}
+}
+
+// ============================================================================
+// Folder RPCs
+// ============================================================================
+
+message CreateFolderRequest {
+  // Name of the folder
+  string name = 1;
+
+  // Optional parent folder ID (omit for root folder)
+  optional int64 parent_id = 2;
+}
+
+message CreateFolderResponse {
+  // The created folder
+  Folder folder = 1;
+}
+
+message GetFolderRequest {
+  // ID of the folder to retrieve
+  int64 id = 1;
+}
+
+message GetFolderResponse {
+  // The requested folder
+  Folder folder = 1;
+}
+
+message ListFoldersRequest {
+  // Optional parent folder ID (omit to list root folders)
+  optional int64 parent_id = 1;
+
+  // Maximum number of folders to return
+  int32 page_limit = 2;
+
+  // Offset for pagination
+  int32 page_offset = 3;
+}
+
+message ListFoldersResponse {
+  // List of folders
+  repeated Folder folders = 1;
+
+  // Offset for the next page
+  int32 next_page_offset = 2;
+
+  // Whether more folders exist
+  bool has_more = 3;
+}
+
+message UpdateFolderRequest {
+  // ID of the folder to update
+  int64 id = 1;
+
+  // New name for the folder
+  string name = 2;
+}
+
+message UpdateFolderResponse {
+  // The updated folder
+  Folder folder = 1;
+}
+
+message DeleteFolderRequest {
+  // ID of the folder to delete
+  // Note: Will fail if folder contains subfolders or documents
+  int64 id = 1;
+}
+
+message DeleteFolderResponse {
+  // Success indicator
+  bool success = 1;
+}
+
+// ============================================================================
+// Label RPCs
+// ============================================================================
+
+message CreateLabelRequest {
+  // Name of the label
+  string name = 1;
+
+  // Hex color code (e.g., "#FF5733")
+  string color = 2;
+}
+
+message CreateLabelResponse {
+  // The created label
+  Label label = 1;
+}
+
+message ListLabelsRequest {
+  // Maximum number of labels to return
+  int32 page_limit = 1;
+
+  // Offset for pagination
+  int32 page_offset = 2;
+}
+
+message ListLabelsResponse {
+  // List of labels
+  repeated Label labels = 1;
+
+  // Offset for the next page
+  int32 next_page_offset = 2;
+
+  // Whether more labels exist
+  bool has_more = 3;
+}
+
+message UpdateLabelRequest {
+  // ID of the label to update
+  int64 id = 1;
+
+  // New name for the label
+  optional string name = 2;
+
+  // New color for the label
+  optional string color = 3;
+}
+
+message UpdateLabelResponse {
+  // The updated label
+  Label label = 1;
+}
+
+message DeleteLabelRequest {
+  // ID of the label to delete
+  int64 id = 1;
+}
+
+message DeleteLabelResponse {
+  // Success indicator
+  bool success = 1;
+}
+
+// ============================================================================
+// Document RPCs
+// ============================================================================
+
+message CreateDocumentRequest {
+  // Title of the document
+  string title = 1;
+
+  // Rich text content (HTML/JSON from Tiptap)
+  string content = 2;
+
+  // ID of the folder to place the document in
+  int64 folder_id = 3;
+}
+
+message CreateDocumentResponse {
+  // The created document
+  Document document = 1;
+}
+
+message GetDocumentRequest {
+  // ID of the document to retrieve
+  int64 id = 1;
+}
+
+message GetDocumentResponse {
+  // The requested document
+  Document document = 1;
+}
+
+message ListDocumentsRequest {
+  // Optional folder ID to list documents from (omit to list all)
+  optional int64 folder_id = 1;
+
+  // Optional label IDs to filter by
+  repeated int64 label_ids = 2;
+
+  // Filter mode for labels (AND or OR)
+  FilterMode filter_mode = 3;
+
+  // Maximum number of documents to return
+  int32 page_limit = 4;
+
+  // Offset for pagination
+  int32 page_offset = 5;
+}
+
+message ListDocumentsResponse {
+  // List of documents
+  repeated Document documents = 1;
+
+  // Offset for the next page
+  int32 next_page_offset = 2;
+
+  // Whether more documents exist
+  bool has_more = 3;
+}
+
+message UpdateDocumentRequest {
+  // ID of the document to update
+  int64 id = 1;
+
+  // New title (omit to keep existing)
+  optional string title = 2;
+
+  // New content (omit to keep existing)
+  optional string content = 3;
+
+  // New folder ID (omit to keep existing)
+  optional int64 folder_id = 4;
+}
+
+message UpdateDocumentResponse {
+  // The updated document
+  Document document = 1;
+}
+
+message DeleteDocumentRequest {
+  // ID of the document to delete
+  int64 id = 1;
+}
+
+message DeleteDocumentResponse {
+  // Success indicator
+  bool success = 1;
+}
+
+// ============================================================================
+// Document-Label Association RPCs
+// ============================================================================
+
+message AddLabelToDocumentRequest {
+  // ID of the document
+  int64 document_id = 1;
+
+  // ID of the label to add
+  int64 label_id = 2;
+}
+
+message AddLabelToDocumentResponse {
+  // Success indicator
+  bool success = 1;
+}
+
+message RemoveLabelFromDocumentRequest {
+  // ID of the document
+  int64 document_id = 1;
+
+  // ID of the label to remove
+  int64 label_id = 2;
+}
+
+message RemoveLabelFromDocumentResponse {
+  // Success indicator
+  bool success = 1;
+}
+
+// ============================================================================
+// Search RPC
+// ============================================================================
+
+message SearchDocumentsRequest {
+  // Search query text
+  string query = 1;
+
+  // Optional folder ID to limit search scope
+  optional int64 folder_id = 2;
+
+  // Optional label IDs to filter results
+  repeated int64 label_ids = 3;
+
+  // Filter mode for labels (AND or OR)
+  FilterMode filter_mode = 4;
+
+  // Maximum number of results to return
+  int32 page_limit = 5;
+
+  // Offset for pagination
+  int32 page_offset = 6;
+}
+
+message SearchDocumentsResponse {
+  // Search results with relevance ranking
+  repeated SearchResult results = 1;
+
+  // Offset for the next page
+  int32 next_page_offset = 2;
+
+  // Whether more results exist
+  bool has_more = 3;
+
+  // Total number of matching documents (not affected by pagination)
+  int32 total_count = 4;
+}
